@@ -1,0 +1,53 @@
+body {
+    font-family: 'Open sans', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header, nav {
+    color: #FFFFFF;
+    letter-spacing: 1px;
+    text-align: center;
+    width: 100%;
+}
+
+header {
+    background: #30252E;
+    font-size: 42px;
+    font-weight: 300;
+    letter-spacing: 2px;
+    padding: 50px 0;
+}
+
+nav {
+    background: #D6503E;
+    padding: 25px 0;
+    transition: box-shadow 400ms;
+    word-spacing: 26px;
+}
+
+main {
+    margin: 3em 1em;
+}
+
+form fieldset {
+    margin: auto 5px !important;
+}
+
+button {
+    margin-top: 2em;
+}
+
+.pure-menu-link {
+    color: #FFFFFF;
+}
+
+.pure-menu-link:hover {
+    color: #30252E;
+}
+
+@media screen and (min-width:48em) {
+    .pure-u-md-1-2 {
+        width: 48%;
+    }
+}
