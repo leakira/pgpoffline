@@ -9,7 +9,7 @@ A completely offline way to manage PGP features
 
 ## How to use
 - Clone this project
-- Add your private keys and public keys on the "/keys" folder
+- Add your private keys and public keys in the "/keys" folder
 - Open any of project HTML files
 - Done!
 
