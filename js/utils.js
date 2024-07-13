@@ -1,9 +1,7 @@
 $(document).ready(function() {
     $('#encrypt').on('submit', function() {
-        const email = $('#user').val();
         const message = $('#message').val();
-
-        encrypt(email, message)
+        encrypt(message)
             .then(result => $('#result').val(result))
             .catch(() => alert('Error in some fields'));
 
@@ -11,12 +9,10 @@ $(document).ready(function() {
     });
 
     $('#decrypt').on('submit', function() {
-        const email = $('#user').val();
         const passphrase = $('#passphrase').val();
         $('#passphrase').val('');
         const message = $('#message').val();
-
-        decrypt(email, message, passphrase)
+        decrypt(message, passphrase)
             .then(result => $('#result').val(result))
             .catch(() => alert('Error in some fields'));
 
@@ -24,11 +20,9 @@ $(document).ready(function() {
     });
 
     $('#sign').on('submit', function() {
-        const email = $('#user').val();
         const passphrase = $('#passphrase').val();
         const message = $('#message').val();
-
-        sign(email, message, passphrase)
+        sign(message, passphrase)
             .then(result => $('#result').val(result))
             .catch(() => alert('Error in some fields'));
 
@@ -36,10 +30,8 @@ $(document).ready(function() {
     });
 
     $('#verify').on('submit', function() {
-        const email = $('#user').val();
         const message = $('#message').val();
-
-        verify(email, message)
+        verify(message)
             .then(result => {
                 const text = [
                     'Valid message!',
@@ -81,7 +73,7 @@ let loadKey = async type => {
     return await files[0].text();
 };
 
-async function encrypt(user, message) {
+async function encrypt(message) {
     const pubKey = await loadKey('public');
     const options = {
         message: openpgp.message.fromText(message),
@@ -97,7 +89,7 @@ async function encrypt(user, message) {
     });
 }
 
-async function decrypt(user, message, passphrase) {
+async function decrypt(message, passphrase) {
     const privKey = await loadKey('private');
     const privKeyObj = (await openpgp.key.readArmored(privKey)).keys[0];
     await privKeyObj.decrypt(passphrase);
@@ -116,7 +108,7 @@ async function decrypt(user, message, passphrase) {
     });
 }
 
-async function sign(user, message, passphrase) {
+async function sign(message, passphrase) {
     const privKey = await loadKey('private');
     const privKeyObj = (await openpgp.key.readArmored(privKey)).keys[0];
     await privKeyObj.decrypt(passphrase);
@@ -135,7 +127,7 @@ async function sign(user, message, passphrase) {
     });
 }
 
-async function verify(user, message) {
+async function verify(message) {
     const pubKey = await loadKey('public');
     const options = {
         message: await openpgp.cleartext.readArmored(message),
