@@ -72,26 +72,17 @@ $(document).ready(function() {
     });
 });
 
-let loadKey = name => {
-    const path = 'keys/'+name;
-    return new Promise((resolve, reject) => {
-        let xhr = new XMLHttpRequest();
-        xhr.open('GET', path);
-        xhr.onload = () => {
-            // Chromium based browsers returns status 0, perhaps because local file request block
-            if ((xhr.status === 0 || xhr.status >= 200) && xhr.status < 300) {
-                resolve(xhr.responseText);
-            } else {
-                reject(xhr.statusText);
-            }
-        };
-        xhr.onerror = () => reject(xhr.statusText);
-        xhr.send();
-    });
+let loadKey = async type => {
+    const files = $('#key').prop('files');
+    if (files.length === 0) {
+        alert('Add a ' + type + ' key to encrypt');
+        return;
+    }
+    return await files[0].text();
 };
 
 async function encrypt(user, message) {
-    const pubKey = await loadKey(user+'.pub');
+    const pubKey = await loadKey('public');
     const options = {
         message: openpgp.message.fromText(message),
         publicKeys: (await openpgp.key.readArmored(pubKey)).keys,
@@ -107,7 +98,7 @@ async function encrypt(user, message) {
 }
 
 async function decrypt(user, message, passphrase) {
-    const privKey = await loadKey(user);
+    const privKey = await loadKey('private');
     const privKeyObj = (await openpgp.key.readArmored(privKey)).keys[0];
     await privKeyObj.decrypt(passphrase);
 
@@ -126,7 +117,7 @@ async function decrypt(user, message, passphrase) {
 }
 
 async function sign(user, message, passphrase) {
-    const privKey = await loadKey(user);
+    const privKey = await loadKey('private');
     const privKeyObj = (await openpgp.key.readArmored(privKey)).keys[0];
     await privKeyObj.decrypt(passphrase);
 
@@ -145,7 +136,7 @@ async function sign(user, message, passphrase) {
 }
 
 async function verify(user, message) {
-    const pubKey = await loadKey(user+'.pub');
+    const pubKey = await loadKey('public');
     const options = {
         message: await openpgp.cleartext.readArmored(message),
         publicKeys: (await openpgp.key.readArmored(pubKey)).keys,
